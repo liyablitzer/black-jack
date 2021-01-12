@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body{
+        background-color:lightseagreen;
+        font-family:'Courier New', Courier, monospace;
+      }
+      .title {
+        color: white;
+        text-align: left;
+        font-size: 32px;
+        font-weight: 100;
+      }
+
+      .card {
+        border: thick solid black;
+        border-radius: 16px;
+        height: 180px;
+        width: 110px;
+        margin-bottom: 16px;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        color: cyan;
+        text-align: center;
+        font-size: 24px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="game-area">
+      <div class="character">
+        <div class="title">Dealer's Cards</div>
+        <div class="card-area">
+          <div id="dealer-0" class="card"></div>
+          <div id="dealer-1" class="card"></div>
+        </div>
+      </div>
+
+      <div class="character">
+        <div class="title">Player's Cards</div>
+        <div class="card-area">
+          <div id="player-0" class="card"></div>
+          <div id="player-1" class="card"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+  <script>
+
+    var deck
+    var dealerCards
+    var playerCards
+
+    var buildDeck = () => {
+      var newDeck = []
+      var suits = ['HEARTS', 'SPADES', 'DIAMONDS', 'CLUBS']
+      var values = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+
+      suits.forEach((suit) => {
+        values.forEach((value) => {
+
+          var card = {
+            suit: suit,
+            value: value,
+          }
+
+          newDeck.push(card)
+
+        })
+      })
+
+      return newDeck
+    }
+    
+    var shuffle = (deck) => {
+
+      var sortFunc = (card1, card2) => { 
+        var result
+
+        if ( Math.random() > .5 ) {
+          result = 1
+        } else {
+          result = -1
+        }
+
+        return result
+      }
+
+      deck.sort(sortFunc)
+
+      return deck
+    }
+
+    var get2Cards = () => {
+      var card1 = deck.shift()
+      var card2 = deck.shift()
+
+      var cards = [card1, card2]
+
+      return cards
+    }
+
+    var displayCards = () => {
+
+      var dealerCard0 = dealerCards[0]
+      document.getElementById("dealer-0").innerHTML = dealerCard0.value + " of " + dealerCard0.suit
+
+      var dealerCard1 = dealerCards[1]
+      document.getElementById("dealer-1").innerHTML = dealerCard1.value + " of " + dealerCard1.suit
+
+      var playerCard0 = playerCards[0]
+      document.getElementById("player-0").innerHTML = playerCard0.value + " of " + playerCard0.suit
+
+      var playerCard1 = playerCards[1]
+      document.getElementById("player-1").innerHTML = playerCard1.value + " of " + playerCard1.suit
+
+    }
+
+    var declareWinner = () => {
+      var dealerTotal = 0
+      var playerTotal = 0
+
+      dealerCards.forEach((card) => {
+        dealerTotal = dealerTotal + card.value
+      })
+
+      playerCards.forEach((card) => {
+        playerTotal = playerTotal + card.value
+      })
+
+      var message
+      if (playerTotal > dealerTotal) {
+        message = "Congrats! Player beats dealer, " + playerTotal + " to " + dealerTotal + "."
+      } else {
+        message = "Better luck next time! Dealer won, " + dealerTotal + " to " + playerTotal + "."
+      }
+
+      alert(message)
+
+      var answer = confirm("Would you like to play again? Press OK to restart the game.")
+      if (answer) {
+        startGame()
+      }
+    }
+    
+    var startGame = () => {
+      var newDeck = buildDeck()
+      var shuffledNewDeck = shuffle(newDeck)
+      deck = shuffledNewDeck
+
+      dealerCards = get2Cards()
+      playerCards = get2Cards()
+      displayCards()
+      setTimeout(declareWinner, 2000)
+    }
+
+    startGame()
+
+  </script>
+</html>
