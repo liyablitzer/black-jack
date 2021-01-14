@@ -1,4 +1,4 @@
-# black-jack-game
+# black-jack
 
 This is my first black jack game I have created for my web development course.
 
